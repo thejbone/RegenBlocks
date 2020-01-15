@@ -1,8 +1,7 @@
 worlds:
 - world
-- world_nether
-- world_the_end
 recordedMaterials:
-- iron_ore:10
-- gold_ore:10
-- coal_ore:20
+- iron_ore:100
+- gold_ore:100
+- coal_ore:100
+replacementBlock: BEDROCK

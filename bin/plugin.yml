@@ -1,5 +1,5 @@
-name: RegenOres
+name: RegenBlocks
 version: 1.0
 author: Dehys
-main: com.dehys.regenores.RegenOres
+main: com.dehys.regenblocks.Plugin
 description: A simple block plugin.
