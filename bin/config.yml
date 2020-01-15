@@ -1,0 +1,8 @@
+worlds:
+- world
+- world_nether
+- world_the_end
+recordedMaterials:
+- iron_ore:10
+- gold_ore:10
+- coal_ore:20

@@ -1,0 +1,5 @@
+name: RegenOres
+version: 1.0
+author: Dehys
+main: com.dehys.regenores.RegenOres
+description: A simple block plugin.
