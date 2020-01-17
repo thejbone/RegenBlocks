@@ -28,6 +28,8 @@ public class BlockBroke implements Listener{
         Location location = block.getLocation();
         Material material = block.getType();
 
+        if (e.getPlayer().hasPermission("regenblocks.break") && e.getPlayer().isSneaking()) return;
+
         for (World w : plugin.worlds) {
             if(w == block.getWorld()) {
                 for (String m : plugin.recordedMaterials) {
@@ -36,7 +38,7 @@ public class BlockBroke implements Listener{
                     long regenTime = Long.parseLong(m.split(":")[1]);
 
                     if(materialName.equalsIgnoreCase(block.getType().name())){
-                        if (e.getPlayer().getItemInHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
+                        if (e.getPlayer().getInventory().getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
                             if(!(block.getDrops(e.getPlayer().getItemInHand()).isEmpty())) {
                                 world.dropItemNaturally(location, new ItemStack(material, 1));
                             }
