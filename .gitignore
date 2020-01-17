@@ -25,3 +25,7 @@ hs_err_pid*
 .project
 /bin
 /.settings
+RegenBlocks.iml
+/.idea
+/out
+/src/test

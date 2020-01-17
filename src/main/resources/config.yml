@@ -1,0 +1,7 @@
+worlds:
+  - world
+recordedMaterials:
+  - iron_ore:100
+  - gold_ore:100
+  - coal_ore:100
+replacementBlock: air
