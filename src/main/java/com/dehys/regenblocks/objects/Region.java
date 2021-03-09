@@ -1,7 +1,5 @@
 package com.dehys.regenblocks.objects;
 
-import java.util.List;
-
 public class Region {
 
     private String name;
