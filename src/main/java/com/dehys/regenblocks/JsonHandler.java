@@ -98,7 +98,7 @@ public class JsonHandler {
             if(file.createNewFile()){
                 Writer writer = Files.newBufferedWriter(Paths.get(path));
                 gson.toJson(worlds, writer);
-                System.out.println("[RegenBlocks] Generated new file: Worlds.json");§
+                System.out.println("[RegenBlocks] Generated new file: Worlds.json");
                 writer.close();
                 return file;
             }
