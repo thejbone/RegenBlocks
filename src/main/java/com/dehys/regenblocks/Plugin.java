@@ -1,5 +1,6 @@
 package com.dehys.regenblocks;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,16 @@ public class Plugin extends JavaPlugin{
     private static long TICK_TIME;
     private Timer timer;
 
+    public static Plugin getPlugin;
+
     public void onEnable() {
+
+        new JsonHandler();
+
+        /*
+        getPlugin = this;
+
+
 
         //Timer (BukkitRunnable but more specific)
         timer = new Timer();
@@ -55,7 +65,7 @@ public class Plugin extends JavaPlugin{
 
 
         //Events
-        getServer().getPluginManager().registerEvents(new BlockBroke(this), this);
+        getServer().getPluginManager().registerEvents(new BlockBroke(this), this);*/
     }
 
     public void onDisable() {
