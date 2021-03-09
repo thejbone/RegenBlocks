@@ -1,5 +1,0 @@
-name: RegenBlocks
-version: 1.2.0
-author: Dehys
-main: com.dehys.regenblocks.Plugin
-description: A simple block plugin.
