@@ -1,57 +1,62 @@
 package com.dehys.regenblocks.events;
 
 import com.dehys.regenblocks.Plugin;
+import com.dehys.regenblocks.hooks.WorldGuardHook;
+import com.dehys.regenblocks.modules.Entry;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 
-public class BlockBreakEvent implements Listener{
+import java.util.List;
+
+public class BlockBreak implements Listener{
 
 
     private final Plugin plugin;
+    private final List<Entry> entries;
+    private final List<Entry> worlds;
+    private final List<Entry> regions;
 
-    public BlockBreakEvent(Plugin plugin) {
+    private WorldGuardHook WGH;
+
+    public BlockBreak(Plugin plugin) {
         this.plugin = plugin;
+        this.entries = Plugin.jsonHandler.getEntries();
+        this.worlds = Plugin.jsonHandler.getWorlds();
+        this.regions = Plugin.jsonHandler.getRegions();
+
+        this.WGH = Plugin.worldGuardHook;
     }
 
-
-    @SuppressWarnings("deprecation")
     @EventHandler
-    public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
-
-        /*
+    public void onBlockBreak(BlockBreakEvent e) {
+        World world = e.getBlock().getWorld();
         Block block = e.getBlock();
-        World world = block.getWorld();
         Location location = block.getLocation();
         Material material = block.getType();
 
-        if (e.getPlayer().hasPermission("regenblocks.break") && e.getPlayer().isSneaking()) return;
+        e.getPlayer().sendMessage("broke");
 
-        for (World w : plugin.worlds) {
-            if(w == block.getWorld()) {
-                for (String m : plugin.recordedMaterials) {
-
-                    String materialName = m.split(":")[0];
-                    long regenTime = Long.parseLong(m.split(":")[1]);
-
-                    if(materialName.equalsIgnoreCase(block.getType().name())){
-                        if (e.getPlayer().getInventory().getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
-                            if(!(block.getDrops(e.getPlayer().getItemInHand()).isEmpty())) {
-                                world.dropItemNaturally(location, new ItemStack(material, 1));
-                            }
-                        }else {
-                            for (ItemStack is : block.getDrops(e.getPlayer().getItemInHand())) {
-                                world.dropItemNaturally(location, is);
-                            }
+        if (entries.stream().anyMatch(entry -> entry.getId().startsWith(world.getName()))){
+            if (entries.stream().anyMatch(entry -> entry.getBlock() == material)){
+                if (Plugin.pluginManager.isPluginEnabled("WorldGuard")){
+                    for (Entry entry : regions){
+                        if (WGH.blockIsInRegion(block, WGH.getRegion(entry)) && entry.getBlock() == material){
+                            e.getPlayer().sendMessage("Block is a valid regional block.");
                         }
-                        new RegenBlock(world, location, material, Plugin.getClock.getTickTime()+regenTime);
-                        block.setType(plugin.replacementBlock);
-                        e.setCancelled(true);
-                        return;
                     }
                 }
-                return;
+
+
+                //do
             }
-        }*/
+        }
+
     }
 
 }
