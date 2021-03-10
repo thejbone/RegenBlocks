@@ -3,7 +3,7 @@ package com.dehys.regenblocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dehys.regenblocks.events.BlockBreakEvent;
+import com.dehys.regenblocks.events.BlockBreak;
 import com.dehys.regenblocks.hooks.GriefPreventionHook;
 import com.dehys.regenblocks.hooks.WorldGuardHook;
 import com.dehys.regenblocks.modules.RegenBlock;
@@ -12,28 +12,27 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Plugin extends JavaPlugin{
 
-    //RegenBlock Public list
     public static List<RegenBlock> regenBlocks;
 
-    //Bukkit Variables
-    private static PluginManager pluginManager;
+    public static PluginManager pluginManager;
     public static Plugin getPlugin;
     public static Clock getClock;
+    public static JsonHandler jsonHandler;
 
-    //Module Variables
     public static WorldGuardHook worldGuardHook;
     public static GriefPreventionHook griefPreventionHook;
 
     public void onEnable() {
+        jsonHandler = new JsonHandler().initialize();
         getPlugin = this;
-        getClock = initializeClock();
         pluginManager = getServer().getPluginManager();
         regenBlocks = new ArrayList<>();
 
         worldGuardHook = (WorldGuardHook) initializeHooks();
-        griefPreventionHook = (GriefPreventionHook) initializeHooks();
 
         initializeEvents();
+
+        getClock = initializeClock();
     }
 
     public void onDisable() {
@@ -59,7 +58,7 @@ public class Plugin extends JavaPlugin{
     }
 
     public void initializeEvents(){
-        pluginManager.registerEvents(new BlockBreakEvent(this), this);
+        pluginManager.registerEvents(new BlockBreak(this), this);
     }
 
 }
