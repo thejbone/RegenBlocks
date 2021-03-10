@@ -27,7 +27,6 @@ public class Plugin extends JavaPlugin{
 
         new JsonHandler();
 
-        /*
         getPlugin = this;
 
 
@@ -65,7 +64,7 @@ public class Plugin extends JavaPlugin{
 
 
         //Events
-        getServer().getPluginManager().registerEvents(new BlockBroke(this), this);*/
+        getServer().getPluginManager().registerEvents(new BlockBroke(this), this);
     }
 
     public void onDisable() {
