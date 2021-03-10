@@ -1,10 +1,13 @@
 package com.dehys.regenblocks.hooks;
 
-import com.sk89q.worldedit.world.World;
+import com.dehys.regenblocks.modules.Entry;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 public class WorldGuardHook implements Hook{
 
@@ -39,7 +42,16 @@ public class WorldGuardHook implements Hook{
     }
 
     public ProtectedRegion getRegion(World world, String id){
-        RegionManager regions = container.get(world);
+        RegionManager regions = container.get(BukkitAdapter.adapt(world));
         return regions != null ? regions.getRegion(id) : null;
+    }
+
+    public ProtectedRegion getRegion(Entry entry){
+        RegionManager regions = container.get(BukkitAdapter.adapt(entry.getWorld()));
+        return regions != null ? regions.getRegion(entry.getRegionName()) : null;
+    }
+
+    public boolean blockIsInRegion(Block block, ProtectedRegion region){
+        return region.contains(block.getX(), block.getY(), block.getZ());
     }
 }

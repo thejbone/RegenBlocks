@@ -1,9 +1,6 @@
 package com.dehys.regenblocks;
 
-import com.dehys.regenblocks.enums.ConfigType;
 import com.dehys.regenblocks.modules.Entry;
-import com.dehys.regenblocks.modules.Region;
-import com.dehys.regenblocks.modules.World;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -11,55 +8,82 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JsonHandler {
 
     private Gson gson;
+    private File file;
 
-    public JsonHandler() {
-        this.gson = new Gson();
+    public JsonHandler initialize(){
+        gson = new Gson();
         try {
-            generateConfigFile(ConfigType.WORLDS);
-            generateConfigFile(ConfigType.REGIONS);
+            generate();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return this;
     }
 
-    public List<World> getWorlds() {
+    public List<Entry> getEntries() {
         try{
-            Reader reader = Files.newBufferedReader(Paths.get("../RegenBlocks/Worlds.json"));
-            List<World> worlds = gson.fromJson(reader, new TypeToken<List<World>>() {}.getType());
+            Reader reader = Files.newBufferedReader(Paths.get("plugins/RegenBlocks/Entries.json"));
+            List<Entry> entries = gson.fromJson(reader, new TypeToken<List<Entry>>() {}.getType());
+            reader.close();
 
-            for (World w : worlds) System.out.println(w);
+            return entries;
+        }catch (IOException e){
+            System.out.println("[RegenBlocks:ERROR] Entries.json file not found! Check directory permissions");
+            return null;
+        }
+    }
+
+    // Will get *:! (* being all worlds and :! being with no regions)
+    public List<Entry> getWorlds() {
+        try{
+            Reader reader = Files.newBufferedReader(Paths.get("plugins/RegenBlocks/Entries.json"));
+            List<Entry> worlds = new ArrayList<>();
+            for (Entry entry : (List<Entry>) gson.fromJson(reader, new TypeToken<List<Entry>>() {}.getType())) {
+                if (!entry.getId().contains(":")){
+                    worlds.add(entry);
+                }
+            }
 
             reader.close();
 
             return worlds;
         }catch (IOException e){
-            Plugin.getPlugin.getLogger().warning("Worlds.json file not found! Check directory permissions");
+            System.out.println("[RegenBlocks:ERROR] Entries.json file not found! Check directory permissions");
             return null;
         }
     }
 
-    public List<Region> getRegions() {
+    // Will get world:* (world: being the prefix and * being all regions)
+    public List<Entry> getRegions() {
         try{
-            Reader reader = Files.newBufferedReader(Paths.get("../RegenBlocks/Regions.json"));
-            List<Region> regions = gson.fromJson(reader, new TypeToken<List<Region>>() {}.getType());
-
-            for (Region r : regions) System.out.println(r);
+            Reader reader = Files.newBufferedReader(Paths.get("plugins/RegenBlocks/Entries.json"));
+            List<Entry> regions = new ArrayList<>();
+            for (Entry entry : (List<Entry>) gson.fromJson(reader, new TypeToken<List<Entry>>() {}.getType())) {
+                if (entry.getId().contains(":")){
+                    regions.add(entry);
+                }
+            }
 
             reader.close();
 
             return regions;
         }catch (IOException e){
-            Plugin.getPlugin.getLogger().warning("Region.json file not found! Check directory permissions");
+            System.out.println("[RegenBlocks:ERROR] Entries.json file not found! Check directory permissions");
             return null;
         }
     }
 
-    public File generateConfigFile(ConfigType type) throws IOException {
+    public File getFile() {
+        return file;
+    }
+
+    public JsonHandler generate() throws IOException {
 
         String dirPath = "plugins/RegenBlocks";
         if (!(Files.exists(Paths.get(dirPath)) && Files.isDirectory(Paths.get(dirPath)))){
@@ -74,47 +98,25 @@ public class JsonHandler {
         }
 
         Entry[] entries = {
-                new Entry("stone", "air", 100),
-                new Entry("diamond_ore", "netherrite", 5000),
-                new Entry("gold_ore", "bedrock", 400),
-                new Entry("diamond_block", "bedrock", 150)
-        };
-
-        World[] worlds = {
-                new World("world1", new Entry[]{entries[0], entries[1]}),
-                new World("world2", new Entry[]{entries[2], entries[3]}),
-        };
-
-        Region[] regions = {
-                new Region("region1", new Entry[]{entries[0], entries[1]}),
-                new Region("region2", new Entry[]{entries[2], entries[3]})
+                new Entry("world", "stone", "air", 100),
+                new Entry("world1", "diamond_ore", "netherrite", 5000),
+                new Entry("world:spawn", "gold_ore", "bedrock", 400),
+                new Entry("world1:shop", "diamond_block", "bedrock", 150)
         };
 
         gson = new GsonBuilder().setPrettyPrinting().create();
 
-        if (type == ConfigType.WORLDS){
-            String path = "plugins/RegenBlocks/Worlds.json";
-            File file = new File(path);
-            if(file.createNewFile()){
-                Writer writer = Files.newBufferedWriter(Paths.get(path));
-                gson.toJson(worlds, writer);
-                System.out.println("[RegenBlocks] Generated new file: Worlds.json");
-                writer.close();
-                return file;
-            }
-            return file;
-        }else{
-            String path = "plugins/RegenBlocks/Regions.json";
-            File file = new File(path);
-            if(file.createNewFile()){
-                Writer writer = Files.newBufferedWriter(Paths.get(path));
-                gson.toJson(regions, writer);
-                System.out.println("[RegenBlocks] Generated new file: Regions.json");
-                writer.close();
-                return file;
-            }
-            return file;
+        String path = "plugins/RegenBlocks/Entries.json";
+        File file = new File(path);
+        this.file = file;
+        if(file.createNewFile()){
+            Writer writer = Files.newBufferedWriter(Paths.get(path));
+            gson.toJson(entries, writer);
+            System.out.println("[RegenBlocks] Generated new file: Entries.json");
+            writer.close();
+            return this;
         }
+        return this;
     }
 
 }
