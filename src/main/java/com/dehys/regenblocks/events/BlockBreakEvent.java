@@ -12,19 +12,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class BlockBroke implements Listener{
+public class BlockBreakEvent implements Listener{
 
 
     private final Plugin plugin;
 
-    public BlockBroke(Plugin plugin) {
+    public BlockBreakEvent(Plugin plugin) {
         this.plugin = plugin;
     }
 
 
     @SuppressWarnings("deprecation")
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent e) {
+    public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         Block block = e.getBlock();
         World world = block.getWorld();
         Location location = block.getLocation();
@@ -49,7 +49,7 @@ public class BlockBroke implements Listener{
                                 world.dropItemNaturally(location, is);
                             }
                         }
-                        new RegenBlock(world, location, material, Plugin.getTickTime()+regenTime);
+                        new RegenBlock(world, location, material, Plugin.getClock.getTickTime()+regenTime);
                         block.setType(plugin.replacementBlock);
                         e.setCancelled(true);
                         return;
