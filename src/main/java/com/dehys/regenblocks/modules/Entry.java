@@ -1,4 +1,4 @@
-package com.dehys.regenblocks.objects;
+package com.dehys.regenblocks.modules;
 
 public class Entry{
 

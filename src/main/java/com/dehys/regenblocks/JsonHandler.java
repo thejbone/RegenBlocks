@@ -1,9 +1,9 @@
 package com.dehys.regenblocks;
 
 import com.dehys.regenblocks.enums.ConfigType;
-import com.dehys.regenblocks.objects.Entry;
-import com.dehys.regenblocks.objects.Region;
-import com.dehys.regenblocks.objects.World;
+import com.dehys.regenblocks.modules.Entry;
+import com.dehys.regenblocks.modules.Region;
+import com.dehys.regenblocks.modules.World;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
