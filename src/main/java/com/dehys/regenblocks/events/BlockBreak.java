@@ -1,16 +1,8 @@
 package com.dehys.regenblocks.events;
 
 import com.dehys.regenblocks.Plugin;
-import com.dehys.regenblocks.modules.RegenBlock;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class BlockBreakEvent implements Listener{
 
@@ -25,6 +17,8 @@ public class BlockBreakEvent implements Listener{
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
+
+        /*
         Block block = e.getBlock();
         World world = block.getWorld();
         Location location = block.getLocation();
@@ -57,7 +51,7 @@ public class BlockBreakEvent implements Listener{
                 }
                 return;
             }
-        }
+        }*/
     }
 
 }
