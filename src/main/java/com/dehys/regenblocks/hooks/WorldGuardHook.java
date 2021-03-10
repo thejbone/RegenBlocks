@@ -1,6 +1,5 @@
 package com.dehys.regenblocks.hooks;
 
-import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -15,7 +14,7 @@ public class WorldGuardHook implements Hook{
     private RegionContainer container;
 
     @Override
-    public Hook Initialize() {
+    public WorldGuardHook Initialize() {
         try{
             worldGuard = WorldGuard.getInstance();
             this.isInitialized = true;
