@@ -8,7 +8,7 @@ public class GriefPreventionHook implements Hook{
     private boolean isInitialized = false;
 
     @Override
-    public Hook Initialize() {
+    public GriefPreventionHook Initialize() {
         return null;
     }
 
