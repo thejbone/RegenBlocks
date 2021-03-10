@@ -1,100 +1,65 @@
 package com.dehys.regenblocks;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
+import com.dehys.regenblocks.events.BlockBreakEvent;
+import com.dehys.regenblocks.hooks.GriefPreventionHook;
+import com.dehys.regenblocks.hooks.WorldGuardHook;
+import com.dehys.regenblocks.modules.RegenBlock;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class Plugin extends JavaPlugin{
 
-    static List<RegenBlock> regenBlocks;
+    //RegenBlock Public list
+    public static List<RegenBlock> regenBlocks;
 
-    List<String> recordedMaterials;
-    List<World> worlds;
-    Material replacementBlock;
-
-    private static long TICK_TIME;
-    private Timer timer;
-
+    //Bukkit Variables
+    private static PluginManager pluginManager;
     public static Plugin getPlugin;
+    public static Clock getClock;
+
+    //Module Variables
+    public static WorldGuardHook worldGuardHook;
+    public static GriefPreventionHook griefPreventionHook;
 
     public void onEnable() {
-
-        new JsonHandler();
-
         getPlugin = this;
-
-
-
-        //Timer (BukkitRunnable but more specific)
-        timer = new Timer();
-        timer.runTaskTimer(this, 0, 1);
-
-        //Regenerating blocks list
+        getClock = initializeClock();
+        pluginManager = getServer().getPluginManager();
         regenBlocks = new ArrayList<>();
 
+        worldGuardHook = (WorldGuardHook) initializeHooks();
+        griefPreventionHook = (GriefPreventionHook) initializeHooks();
 
-        //Configuration
-        recordedMaterials = new ArrayList<>();
-        worlds = new ArrayList<>();
-
-        getConfig().options().copyDefaults(true);
-        saveConfig();
-
-        getConfig().getStringList("recordedMaterials").stream().forEach(
-                material -> recordedMaterials.add(material.toString()));
-
-
-
-        getConfig().getStringList("worlds").stream().forEach(
-                world -> worlds.add(
-                        Bukkit.getWorld(world.toString())
-                ));
-
-
-        replacementBlock = Material.matchMaterial(getConfig().getString("replacementBlock"));
-        if(replacementBlock == null) {
-            replacementBlock = Material.BEDROCK;
-        }
-
-
-        //Events
-        getServer().getPluginManager().registerEvents(new BlockBroke(this), this);
+        initializeEvents();
     }
 
     public void onDisable() {
-
-        timer.cancel();
-        timer = null;
-
+        getClock.cancel();
         for (RegenBlock rb : regenBlocks) {
             rb.regenerate();
         }
     }
 
-    static long currentTickTime() {
-        return TICK_TIME;
+    public Object initializeHooks(){
+        if (pluginManager.getPlugin("WorldGuard") != null){
+            return new WorldGuardHook().Initialize();
+        } else if (pluginManager.getPlugin("GriefPrevention") != null){
+            return new GriefPreventionHook().Initialize();
+        } else {
+            System.out.println("[RegenBlocks] Not using WorldGuard nor GriefPrevention.");
+            return null;
+        }
     }
 
-    private class Timer extends BukkitRunnable {
+    public Clock initializeClock(){
+        return new Clock();
+    }
 
-        @Override
-        public void run() {
-
-            TICK_TIME++;
-
-            for (RegenBlock rb : regenBlocks) {
-                if(rb.getRegenTime() == currentTickTime()) {
-                    rb.regenerate();
-                }
-            }
-        }
-
+    public void initializeEvents(){
+        pluginManager.registerEvents(new BlockBreakEvent(this), this);
     }
 
 }

@@ -1,5 +1,7 @@
-package com.dehys.regenblocks;
+package com.dehys.regenblocks.events;
 
+import com.dehys.regenblocks.Plugin;
+import com.dehys.regenblocks.modules.RegenBlock;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -13,9 +15,9 @@ import org.bukkit.inventory.ItemStack;
 public class BlockBroke implements Listener{
 
 
-    private Plugin plugin;
+    private final Plugin plugin;
 
-    BlockBroke(Plugin plugin) {
+    public BlockBroke(Plugin plugin) {
         this.plugin = plugin;
     }
 
@@ -47,7 +49,7 @@ public class BlockBroke implements Listener{
                                 world.dropItemNaturally(location, is);
                             }
                         }
-                        new RegenBlock(world, location, material, Plugin.currentTickTime()+regenTime);
+                        new RegenBlock(world, location, material, Plugin.getTickTime()+regenTime);
                         block.setType(plugin.replacementBlock);
                         e.setCancelled(true);
                         return;
