@@ -1,5 +1,6 @@
 package com.dehys.regenblocks.hooks;
 
+import com.dehys.regenblocks.Plugin;
 import com.dehys.regenblocks.modules.Entry;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
@@ -8,6 +9,8 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+
+import java.util.List;
 
 public class WorldGuardHook implements Hook{
 
@@ -54,4 +57,19 @@ public class WorldGuardHook implements Hook{
     public boolean blockIsInRegion(Block block, ProtectedRegion region){
         return region.contains(block.getX(), block.getY(), block.getZ());
     }
+
+    public Entry getRegionalBlockEntry(Block block){
+        List<Entry> entries = Plugin.jsonHandler.getRegions();
+        for (Entry entry : entries){
+            if (
+                    blockIsInRegion(block, getRegion(entry)) &&
+                    entry.getMaterial().equalsIgnoreCase(block.getType().toString())
+            ){
+                return entry;
+            }
+        }
+        return null;
+    }
+
+
 }

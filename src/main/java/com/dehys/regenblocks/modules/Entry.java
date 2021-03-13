@@ -1,23 +1,25 @@
 package com.dehys.regenblocks.modules;
 
+import com.sk89q.worldguard.bukkit.util.Materials;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
+
+import java.util.Locale;
 
 public class Entry{
 
     private String id;
-    private String blockName;
-    private String replacementBlock;
+    private String material;
+    private String replacementMaterial;
     private int delay;
 
     public Entry(){}
 
-    public Entry(String id, String blockName, String replacementBlock, int delay){
+    public Entry(String id, String material, String replacementMaterial, int delay){
         this.id = id;
-        this.blockName = blockName;
-        this.replacementBlock = replacementBlock;
+        this.material = material;
+        this.replacementMaterial = replacementMaterial;
         this.delay = delay;
     }
 
@@ -29,8 +31,10 @@ public class Entry{
         return Bukkit.getWorld(id.replaceAll("\\b:.+\\b", ""));
     }
 
+    //move this to WGH class?
     public String getRegionName(){
-        return id.replaceAll("\\b.+:\\b", "") == "" ? null : id.replaceAll("\\b.+:\\b", "");
+        String regionName = id.replaceAll("\\b.+:\\b", "");
+        return  regionName.isEmpty() || regionName.equalsIgnoreCase(getWorld().getName()) ? null : regionName;
     }
 
     public Entry setId(String id){
@@ -38,25 +42,29 @@ public class Entry{
         return this;
     }
 
-    public String getBlockName() {
-        return blockName;
+    public String getMaterial(){
+        return this.material;
     }
 
-    public Material getBlock(){
-        return Material.getMaterial(blockName.toUpperCase());
+    public Material getMaterialConverted() {
+        return Material.matchMaterial(this.material.toUpperCase(Locale.ENGLISH));
     }
 
-    public Entry setBlockName(String blockName) {
-        this.blockName = blockName;
+    public Entry setMaterial(String material) {
+        this.material = material;
         return this;
     }
 
-    public String getReplacementBlock(){
-        return replacementBlock;
+    public String getReplacementMaterial(){
+        return this.replacementMaterial;
     }
 
-    public Entry setReplacementBlock(String replacementBlock){
-        this.replacementBlock = replacementBlock;
+    public Material getReplacementMaterialConverted() {
+        return Material.matchMaterial(this.replacementMaterial.toUpperCase(Locale.ENGLISH));
+    }
+
+    public Entry setReplacementMaterial(String replacementMaterial){
+        this.replacementMaterial = replacementMaterial;
         return this;
     }
 
