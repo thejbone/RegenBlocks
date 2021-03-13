@@ -28,9 +28,8 @@ public class Plugin extends JavaPlugin{
         pluginManager = getServer().getPluginManager();
         regenBlocks = new ArrayList<>();
 
-        worldGuardHook = (WorldGuardHook) initializeHooks();
-
         initializeEvents();
+        initializeHooks();
 
         getClock = initializeClock();
     }
@@ -42,14 +41,13 @@ public class Plugin extends JavaPlugin{
         }
     }
 
-    public Object initializeHooks(){
+    public void initializeHooks(){
         if (pluginManager.getPlugin("WorldGuard") != null){
-            return new WorldGuardHook().Initialize();
+            worldGuardHook = new WorldGuardHook().Initialize();
         } else if (pluginManager.getPlugin("GriefPrevention") != null){
-            return new GriefPreventionHook().Initialize();
+            griefPreventionHook = new GriefPreventionHook().Initialize();
         } else {
             System.out.println("[RegenBlocks] Not using WorldGuard nor GriefPrevention.");
-            return null;
         }
     }
 
