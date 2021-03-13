@@ -23,6 +23,21 @@ public class JsonHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        for (Entry e : getEntries()){
+
+            String id = e.getId();
+            String material = e.getMaterialConverted() != null ? e.getMaterialConverted().toString() : "null";
+            String replacementMaterial = e.getReplacementMaterialConverted() != null ? e.getReplacementMaterialConverted().toString() : "null";
+            int delay = e.getDelay();
+
+            System.out.println("\t"+id);
+            System.out.println("\t"+e.getMaterial()+": "+material);
+            System.out.println("\t"+e.getReplacementMaterial()+": "+replacementMaterial);
+            System.out.println("\t"+delay);
+            System.out.println(" ");
+        }
+
         return this;
     }
 
