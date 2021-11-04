@@ -24,7 +24,7 @@ public class JsonHandler {
             e.printStackTrace();
         }
 
-        for (Entry e : getEntries()){
+        /*for (Entry e : getEntries()){
 
             String id = e.getId();
             String material = e.getMaterialConverted() != null ? e.getMaterialConverted().toString() : "null";
@@ -37,7 +37,7 @@ public class JsonHandler {
             System.out.println("\t"+delay);
             System.out.println(" ");
         }
-
+*/
         return this;
     }
 

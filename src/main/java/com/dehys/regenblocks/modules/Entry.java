@@ -1,6 +1,5 @@
 package com.dehys.regenblocks.modules;
 
-import com.sk89q.worldguard.bukkit.util.Materials;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
