@@ -1,7 +1,8 @@
-worlds:
-  - world
+claimsUUIDs:
+  - 32468bb1-5b54-4853-ae25-12320a1412e5
 recordedMaterials:
   - iron_ore:100
   - gold_ore:100
   - coal_ore:100
-replacementBlock: bedrock
+replacementBlock: AIR
+

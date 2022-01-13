@@ -1,32 +1,42 @@
 package com.dehys.regenblocks;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+
+import java.util.UUID;
 
 public class RegenBlock {
 
     private World world;
     private Location location;
-    private Material material;
     private long regenTime;
+    private UUID claim;
+    private byte data;
+    private Material material;
 
-    RegenBlock(World world, Location location, Material material, long regenTime) {
+    RegenBlock(World world, UUID claim, Block block, long regenTime) {
         this.world = world;
-        this.location = location;
-        this.material = material;
+        this.claim = claim;
+        this.location = block.getLocation();
+        this.data = block.getData();
+        this.material = block.getType();
         this.regenTime = regenTime;
 
         Plugin.regenBlocks.add(this);
     }
 
     void regenerate() {
-        this.world.getBlockAt(this.location).setType(this.material);
+        world.getBlockAt(this.location).setType(material);
+        world.getBlockAt(this.location).setData(data);
+//        Bukkit.broadcastMessage(material + " " +  data  + " has been replaced!");
     }
 
-    World getWorld() {
-        return this.world;
-    }
+    World getWorld() { return this.world; }
+
+    UUID getClaim() { return this.claim; }
 
     Location getLocation() {
         return this.location;
@@ -34,6 +44,10 @@ public class RegenBlock {
 
     Material getMaterial() {
         return this.material;
+    }
+
+    byte getByte(){
+        return this.data;
     }
 
     long getRegenTime() {

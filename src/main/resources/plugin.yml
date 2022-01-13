@@ -1,5 +1,7 @@
 name: RegenBlocks
-version: 1.2.0
+version: 1.3
 author: Dehys
 main: com.dehys.regenblocks.Plugin
 description: A simple block plugin.
+depend: [GriefDefender]
+api-version: "1.12"
