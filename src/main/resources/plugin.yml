@@ -1,7 +1,13 @@
 name: RegenBlocks
 version: 1.3
 author: Dehys
-main: com.dehys.regenblocks.Plugin
-description: A simple block plugin.
+main: com.dehys.regenblocks.RegenBlocks
+description: A regeneration block plugin
 depend: [GriefDefender]
 api-version: "1.12"
+
+commands:
+  rbreload:
+    description: Reload Regen Blocks Configuration
+    usage: /<command>
+    permission: regenblocks.reload

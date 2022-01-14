@@ -8,7 +8,7 @@ import org.bukkit.block.Block;
 
 import java.util.UUID;
 
-public class RegenBlock {
+public class PutBlockBack {
 
     private World world;
     private Location location;
@@ -17,7 +17,7 @@ public class RegenBlock {
     private byte data;
     private Material material;
 
-    RegenBlock(World world, UUID claim, Block block, long regenTime) {
+    PutBlockBack(World world, UUID claim, Block block, long regenTime) {
         this.world = world;
         this.claim = claim;
         this.location = block.getLocation();
@@ -25,7 +25,7 @@ public class RegenBlock {
         this.material = block.getType();
         this.regenTime = regenTime;
 
-        Plugin.regenBlocks.add(this);
+        RegenBlocks.regenBlocks.add(this);
     }
 
     void regenerate() {

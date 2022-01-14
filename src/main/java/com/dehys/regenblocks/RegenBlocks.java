@@ -1,26 +1,29 @@
 package com.dehys.regenblocks;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import com.griefdefender.api.GriefDefender;
 import com.griefdefender.api.claim.Claim;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Plugin extends JavaPlugin{
+public class RegenBlocks extends JavaPlugin {
 
-    static List<RegenBlock> regenBlocks;
+    static List<PutBlockBack> regenBlocks;
 
     List<String> recordedMaterials;
     List<World> worlds;
-    List<UUID> claims;
+    HashMap<UUID,List<String>> claims;
     Material replacementBlock;
+
+    FileConfiguration config;
 
     private static long TICK_TIME;
     private Timer timer;
@@ -33,21 +36,17 @@ public class Plugin extends JavaPlugin{
 
         //Regenerating blocks list
         regenBlocks = new ArrayList<>();
-        claims = new ArrayList<>();
+        claims = new HashMap<>();
 
         //Configuration
-        recordedMaterials = new ArrayList<>();
-        worlds = new ArrayList<>();
-
-        getConfig().options().copyDefaults(true);
+        getConfig().options().copyDefaults(false);
         saveConfig();
 
-        getConfig().getStringList("recordedMaterials").forEach(
-                material -> recordedMaterials.add(material.toString()));
-
-        getConfig().getStringList("claimsUUIDs").forEach(
-                claim -> claims.add(UUID.fromString(claim)));
-
+        for(String key : getConfig().getConfigurationSection("claimsUUIDs").getKeys(false))
+        {
+            List<String> blocks = new ArrayList<>(getConfig().getStringList("claimsUUIDs." + key + ".recordedMaterials"));
+            claims.put(UUID.fromString(key), blocks);
+        }
 
         replacementBlock = Material.matchMaterial(getConfig().getString("replacementBlock"));
         if(replacementBlock == null) {
@@ -63,7 +62,7 @@ public class Plugin extends JavaPlugin{
         timer.cancel();
         timer = null;
 
-        for (RegenBlock rb : regenBlocks) {
+        for (PutBlockBack rb : regenBlocks) {
             rb.regenerate();
         }
     }
@@ -79,7 +78,6 @@ public class Plugin extends JavaPlugin{
         return c;
     }
 
-
     private static class Timer extends BukkitRunnable {
 
         @Override
@@ -87,7 +85,7 @@ public class Plugin extends JavaPlugin{
 
             TICK_TIME++;
 
-            for (RegenBlock rb : regenBlocks) {
+            for (PutBlockBack rb : regenBlocks) {
                 if(rb.getRegenTime() == currentTickTime()) {
                     rb.regenerate();
                 }

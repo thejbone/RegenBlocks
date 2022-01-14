@@ -1,8 +1,6 @@
 claimsUUIDs:
-  - 32468bb1-5b54-4853-ae25-12320a1412e5
-recordedMaterials:
-  - iron_ore:100
-  - gold_ore:100
-  - coal_ore:100
+  00000000-0000-0000-0000-000000000000:
+    recordedMaterials:
+      - stone:100
 replacementBlock: AIR
 
